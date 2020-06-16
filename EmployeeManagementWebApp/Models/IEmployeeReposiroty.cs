@@ -7,6 +7,10 @@ namespace EmployeeManagementWebApp.Models
 {
     public interface IEmployeeReposiroty
     {
-        Employee GetEmployee(int Id);
+        Employee GetEmployee(int? Id);
+        IEnumerable<Employee> GetEmployeeList();
+        Employee AddEmployee(Employee employee);
+        Employee Update(Employee changeEmployee);
+        Employee Delete(int id);
     }
 }

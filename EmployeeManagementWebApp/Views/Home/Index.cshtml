@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Employee>
+@{ 
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.PageTitle = "EmployeeList";
+}
+
+
+<div class="card-deck">
+    @foreach (var em in Model)
+    {
+    <div class="card m-3">
+        
+        <div class="card-header bg-danger">
+            <h3>@em.Name</h3>
+        </div>
+        <div class="card-body text-center">
+
+            @*//actress porinita*@
+            <img class="card-img-top" src="~/images/porinita.jpg" alt="Alternate Text" asp-append-version="true" />
+            <h3>Member Id:@em.Name</h3>
+            <h3>Email:@em.Email</h3>
+            <h3>Mobile:@em.Mobile</h3>
+            <h3>Department:@em.Department</h3>
+            <div class="card-footer text-center">
+                @*<a href="@Url.Action("details", "home", new { id=em.Id})" class="btn btn-primary">Details</a>
+            @Html.ActionLink("View", "details", "home", new { id = em.Id })*@
+                <a asp-controller="home" asp-action="details" asp-route-id="@em.Id"
+                   class="btn btn-primary m-1">Details</a>
+                @*<a href="/home/details/@em.Id" class="btn btn-primary">View</a>*@
+                <a href="#" class="btn btn-primary m-1">Edit</a>
+                <a href="#" class="btn btn-danger m-1">Delete</a>
+
+            </div>
+        </div>       
+        
+    </div>
+      
+    }
+
+</div>
+
+@section Scripts{ 
+    <script src="~/js/CustomJavaScript.js"></script>
+}
+

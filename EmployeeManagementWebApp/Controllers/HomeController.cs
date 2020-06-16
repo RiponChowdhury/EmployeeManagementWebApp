@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagementWebApp.Models;
+using EmployeeManagementWebApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementWebApp.Controllers
 {
+    //[Route("[controller]")]
     public class HomeController : Controller
     {
         private  readonly IEmployeeReposiroty _employeeRepositry;
@@ -14,17 +16,52 @@ namespace EmployeeManagementWebApp.Controllers
         {
             _employeeRepositry = employeeReposiroty;
         }
-        public string Index()
+        //[Route("")]
+        //[Route("Home")]
+        //[Route("[action]")]
+        //[Route("~/")]
+        public ViewResult Index()
         {
-
-            //return View(a);
-            return _employeeRepositry.GetEmployee(1).Name;
+         
+            var model= _employeeRepositry.GetEmployeeList();
+            return View(model);
         }
-        public JsonResult GetEmployeeDetails(int id)
+        //[Route("[action]/{id?}")]
+        public ViewResult Details(int? id)
         {
-            Employee employee = _employeeRepositry.GetEmployee(id);
+           // ViewBag.PageTitle = "Details";
+         //   Employee employee = _employeeRepositry.GetEmployee(id);
             //return View(a);
-            return Json(employee);
+            //ViewBag.Employee = employee;
+            //ViewBag.PageTitle = "This is Page Title";
+            HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
+            {
+
+                Employee = _employeeRepositry.GetEmployee(id),
+                PageTitle= "Page Title From ViewModel Property"
+            };
+            //viewModel.Employee = employee;
+            //viewModel.PageTitle = "Page Title From ViewModel Property";
+            return View(viewModel);
+        }
+        [HttpGet]
+        public ViewResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                Employee newEmployee = _employeeRepositry.AddEmployee(employee);
+                return RedirectToAction("Details", new { id = newEmployee.Id });
+            }
+            else
+            {
+                return View();
+            }
+            
         }
     }
 }

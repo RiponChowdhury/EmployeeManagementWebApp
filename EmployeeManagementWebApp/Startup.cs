@@ -6,6 +6,7 @@ using EmployeeManagementWebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,9 +25,13 @@ namespace EmployeeManagementWebApp
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddMvcCore();
-            services.AddSingleton<IEmployeeReposiroty,MockEmployeeRepositroy>();
+            services.AddDbContextPool<AppDBContext>(options=>options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
+            //services.AddMvc();
+            //services.AddMvcCore();
+            services.AddMvc().AddXmlSerializerFormatters();
+            //services.AddSingleton<IEmployeeReposiroty,MockEmployeeRepositroy>();
+            //services.AddScoped<IEmployeeReposiroty,MockEmployeeRepositroy>();
+            services.AddScoped<IEmployeeReposiroty, SQLEmployeeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +53,11 @@ namespace EmployeeManagementWebApp
             //app.UseDefaultFiles(defaultFilesOptions);
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
+            //app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute("default", "sd/{controller=Home}/{action=index}/{id?}");
+            //});
             //FileServerOptions fileServerOptions = new FileServerOptions();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("Home.html");
