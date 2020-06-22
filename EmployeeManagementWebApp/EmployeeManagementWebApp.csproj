@@ -6,6 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200620161410_AlterSeedEmployeeTable.cs" />
+    <Compile Remove="Migrations\20200620161410_AlterSeedEmployeeTable.Designer.cs" />
+    <Compile Remove="Migrations\20200620165348_AddColumnPhotoPath.cs" />
+    <Compile Remove="Migrations\20200620165348_AddColumnPhotoPath.Designer.cs" />
+    <Compile Remove="Migrations\20200620170205_AddPhotoPathColumn.cs" />
+    <Compile Remove="Migrations\20200620170205_AddPhotoPathColumn.Designer.cs" />
+    <Compile Remove="Migrations\20200620170424_AddPhotoPathCol.cs" />
+    <Compile Remove="Migrations\20200620170424_AddPhotoPathCol.Designer.cs" />
+    <Compile Remove="Migrations\20200622162522_AddPhotoPathCol.cs" />
+    <Compile Remove="Migrations\20200622162522_AddPhotoPathCol.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />

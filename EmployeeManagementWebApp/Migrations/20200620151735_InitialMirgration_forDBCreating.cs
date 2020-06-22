@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmployeeManagementWebApp.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialMirgration_forDBCreating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

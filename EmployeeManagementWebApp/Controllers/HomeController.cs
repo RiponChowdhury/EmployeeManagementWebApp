@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagementWebApp.Models;
 using EmployeeManagementWebApp.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementWebApp.Controllers
@@ -12,9 +14,13 @@ namespace EmployeeManagementWebApp.Controllers
     public class HomeController : Controller
     {
         private  readonly IEmployeeReposiroty _employeeRepositry;
-        public HomeController(IEmployeeReposiroty employeeReposiroty)
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public HomeController(IEmployeeReposiroty employeeReposiroty,
+            IHostingEnvironment hostingEnvironment)
         {
             _employeeRepositry = employeeReposiroty;
+            this.hostingEnvironment = hostingEnvironment;
         }
         //[Route("")]
         //[Route("Home")]
@@ -50,18 +56,30 @@ namespace EmployeeManagementWebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeCreateViewModel createViewModel)
         {
             if (ModelState.IsValid)
             {
-                Employee newEmployee = _employeeRepositry.AddEmployee(employee);
-                return RedirectToAction("Details", new { id = newEmployee.Id });
+                string uniqueFileName = null;
+                if (createViewModel.Photo != null)
+                {
+                    string uploadFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + createViewModel.Photo.FileName;
+                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                    createViewModel.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+                Employee employee = new Employee
+                {
+
+                    Name = createViewModel.Name,
+                    Email = createViewModel.Name,
+                    Mobile = createViewModel.Mobile,
+                    Department = createViewModel.Department,
+                };
+                _employeeRepositry.AddEmployee(employee);
+                return RedirectToAction("Details", new { id = employee.Id });
             }
-            else
-            {
-                return View();
-            }
-            
+            return View();
         }
     }
 }

@@ -3,14 +3,16 @@ using EmployeeManagementWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmployeeManagementWebApp.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200620160312_SeedEmployeeTable")]
+    partial class SeedEmployeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,18 +29,14 @@ namespace EmployeeManagementWebApp.Migrations
                     b.Property<int>("Department");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                        .IsRequired();
 
                     b.Property<string>("Mobile")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("PhotoPath")
-                        .HasMaxLength(200);
+                        .HasMaxLength(10);
 
                     b.HasKey("Id");
 
@@ -52,14 +50,6 @@ namespace EmployeeManagementWebApp.Migrations
                             Email = "mithun.kar@gmail.com",
                             Mobile = "01515652129",
                             Name = "Mithun Kar"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Department = 0,
-                            Email = "ponting15@gmail.com",
-                            Mobile = "01922805565",
-                            Name = "Rajesh Kumar Majumdar"
                         });
                 });
 #pragma warning restore 612, 618
