@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.PageTitle = "Single Employee";
+    var photoPath = "~/images/" + (Model.Employee.PhotoPath ?? "actress.jpg");
 }
 
 <div class="card-deck">
@@ -13,8 +14,8 @@
                 <h3>@Model.Employee.Name</h3>
             </div>
             <div class="card-body text-center">
-                <img class="card-img-top" src="~/images/actress.jpg" alt="Alternate Text" />
-                <h3>Member Id:@Model.Employee.Name</h3>
+                <img class="card-img-top imageThumbnail" src=@photoPath alt="Alternate Text" asp-append-version="true" />
+                <h3>Name:@Model.Employee.Name</h3>
                 <h3>Email:@Model.Employee.Email</h3>
                 <h3>Mobile:@Model.Employee.Mobile</h3>
                 <h3>Department:@Model.Employee.Department</h3>
