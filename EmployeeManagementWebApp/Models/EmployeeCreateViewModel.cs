@@ -23,7 +23,7 @@ namespace EmployeeManagementWebApp.Models
         public string Mobile { get; set; }
         [Required]
         public Dept? Department { get; set; }
-        public IFormFile Photo { get; set; }
+        public List<IFormFile> Photos { get; set; }
 
     }
 }
