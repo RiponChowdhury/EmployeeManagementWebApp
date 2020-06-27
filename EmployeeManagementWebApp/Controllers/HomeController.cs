@@ -51,37 +51,55 @@ namespace EmployeeManagementWebApp.Controllers
             //viewModel.PageTitle = "Page Title From ViewModel Property";
             return View(viewModel);
         }
+
         [HttpGet]
         public ViewResult Create()
         {
             return View();
         }
+        [HttpGet]
+        public ViewResult Edit(int id)
+        {
+            Employee employee = _employeeRepositry.GetEmployee(id);
+            EmployeeEditViewModel employeeEditView = new EmployeeEditViewModel()
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Mobile = employee.Mobile,
+                Department = employee.Department,
+                ExistingPhotoPath = employee.PhotoPath
+            };
+            return View(employeeEditView);
+        }
         [HttpPost]
-        public IActionResult Create([FromForm] EmployeeCreateViewModel model)
+        public IActionResult Edit( EmployeeEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = null;
-
-                // If the Photo property on the incoming model object is not null, then the user
-                // has selected an image to upload.
-                if (model.Photos != null && model.Photos.Count>0)
+                Employee exEmployee = _employeeRepositry.GetEmployee(model.Id);
+                exEmployee.Name = model.Name;
+                exEmployee.Email = model.Email;
+                exEmployee.Department = model.Department;
+                exEmployee.Mobile = model.Mobile;
+                if (model.ExistingPhotoPath!=null)
                 {
-                    foreach (IFormFile photo in model.Photos)
-                    {
-                        // The image must be uploaded to the images folder in wwwroot
-                        // To get the path of the wwwroot folder we are using the inject
-                        // HostingEnvironment service provided by ASP.NET Core
-                        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
-                        // To make sure the file name is unique we are appending a new
-                        // GUID value and and an underscore to the file name
-                        uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        // Use CopyTo() method provided by IFormFile interface to
-                        // copy the file to wwwroot/images folder
-                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
-                    }
+                  string FilePath=  Path.Combine(hostingEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
+                    System.IO.File.Delete(FilePath);
                 }
+                exEmployee.PhotoPath = ProcessUploadFile(model);
+                _employeeRepositry.Update(exEmployee);
+                return RedirectToAction("index", new { id = exEmployee.Id });
+            }
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create( EmployeeCreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = ProcessUploadFile(model);
 
                 Employee newEmployee = new Employee
                 {
@@ -99,6 +117,36 @@ namespace EmployeeManagementWebApp.Controllers
             }
 
             return View();
+        }
+
+        private string ProcessUploadFile(EmployeeCreateViewModel model)
+        {
+            string uniqueFileName = null;
+
+            // If the Photo property on the incoming model object is not null, then the user
+            // has selected an image to upload.
+            if (model.Photos != null && model.Photos.Count > 0)
+            {
+                foreach (IFormFile photo in model.Photos)
+                {
+                    // The image must be uploaded to the images folder in wwwroot
+                    // To get the path of the wwwroot folder we are using the inject
+                    // HostingEnvironment service provided by ASP.NET Core
+                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    // To make sure the file name is unique we are appending a new
+                    // GUID value and and an underscore to the file name
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    // Use CopyTo() method provided by IFormFile interface to
+                    // copy the file to wwwroot/images folder
+                    using (var fileStream= new FileStream(filePath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }
