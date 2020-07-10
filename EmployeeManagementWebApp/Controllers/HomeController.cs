@@ -36,20 +36,30 @@ namespace EmployeeManagementWebApp.Controllers
         //[Route("[action]/{id?}")]
         public ViewResult Details(int? id)
         {
-           // ViewBag.PageTitle = "Details";
-         //   Employee employee = _employeeRepositry.GetEmployee(id);
+            // ViewBag.PageTitle = "Details";
+            //   Employee employee = _employeeRepositry.GetEmployee(id);
             //return View(a);
             //ViewBag.Employee = employee;
             //ViewBag.PageTitle = "This is Page Title";
-            HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
+            Employee employee = _employeeRepositry.GetEmployee(id.Value);
+            if (employee==null)
             {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound",id.Value);
+            }
+            else
+            {
+                HomeDetailsViewModel viewModel = new HomeDetailsViewModel()
+                {
 
-                Employee = _employeeRepositry.GetEmployee(id),
-                PageTitle= "Page Title From ViewModel Property"
-            };
-            //viewModel.Employee = employee;
-            //viewModel.PageTitle = "Page Title From ViewModel Property";
-            return View(viewModel);
+                    Employee = employee,
+                    PageTitle = "Page Title From ViewModel Property"
+                };
+                //viewModel.Employee = employee;
+                //viewModel.PageTitle = "Page Title From ViewModel Property";
+                return View(viewModel);
+            }
+           
         }
 
         [HttpGet]

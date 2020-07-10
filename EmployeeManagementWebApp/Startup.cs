@@ -46,6 +46,10 @@ namespace EmployeeManagementWebApp
                 //};
                 //app.UseDeveloperExceptionPage(exceptionPageOptions);
             }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            }
 
             //DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
             //defaultFilesOptions.DefaultFileNames.Clear();
@@ -62,12 +66,12 @@ namespace EmployeeManagementWebApp
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("Home.html");
             //  app.UseFileServer();
-            app.Run(async (context) =>
-            {
-                //throw new Exception("This is an exception method");
-                //await context.Response.WriteAsync("Hello World!");
-                await context.Response.WriteAsync("MVC Route:");
-            });
+            //app.Run(async (context) =>
+            //{
+            //    //throw new Exception("This is an exception method");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //    await context.Response.WriteAsync("MVC Route:");
+            //});
         }
     }
 }
